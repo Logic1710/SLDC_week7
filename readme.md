@@ -16,7 +16,7 @@ This project is a user management system built with Node.js, Express, and MySQL.
 2. Set up the environment variables: Create a .env file in the root directory and add the following:
 
    ```sh
-       DB_HOST=your_database_host
+      DB_HOST=your_database_host
       DB_USER=your_database_user
       DB_PASSWORD=your_database_password
       DB_NAME=your_database_name
