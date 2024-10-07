@@ -172,3 +172,10 @@ The application provides a RESTful API for managing users. You can use tools lik
 
 ### Workflow Diagram
 ![Workflow Diagram](./resource/SDLC_week7.drawio.png)
+### SQL Injection Prevention
+- Fullname can't contain special characters
+![picture](./resource/img.png)
+- Password must be at least 8 characters long and contain one uppercase letter, and one special character
+![picture](./resource/img_1.png)
+- Email must be in the correct format
+![picture](./resource/img_2.png)

@@ -2,7 +2,12 @@ const User = require("../model/user");
 
 //utils
 const makeId = require("../utils/random_string");
-const { validateInput } = require("../utils/regexr");
+const {
+  validateInputEmail,
+  validateInputPassword,
+  validateInputUsername,
+  validateInputFullname,
+} = require("../utils/regexr");
 const {
   authenticateToken,
   generateAccessToken,
@@ -48,7 +53,32 @@ router.post("/", async (req, res) => {
     return;
   }
 
-  if (validateInput(req.body.email)) {
+  if (!validateInputFullname(req.body.fullname)) {
+    res.status(400).send({
+      success: false,
+      error: "Fullname can only contain alphabets and spaces",
+    });
+    return;
+  }
+
+  if (!validateInputUsername(req.body.username)) {
+    res.status(400).send({
+      success: false,
+      error: "Username can only contain alphanumeric characters",
+    });
+    return;
+  }
+
+  if (!validateInputPassword(req.body.password)) {
+    res.status(400).send({
+      success: false,
+      error:
+        "Password must be at least 8 characters long, contain at least one uppercase letter and one special character",
+    });
+    return;
+  }
+
+  if (validateInputEmail(req.body.email)) {
     const password = req.body.password;
     const salt = makeId(6);
     const saltPlusPass = salt + password;
@@ -118,7 +148,21 @@ router.put("/", authenticateToken, async (req, res) => {
     return;
   }
 
-  if (validateInput(req.body.email)) {
+  if (!validateInputFullname(req.body.fullname)) {
+    res.status(400).send({
+      success: false,
+      error: "Fullname can only contain alphabets and spaces",
+    });
+  }
+
+  if (validateInputUsername(req.body.username)) {
+    res.status(400).send({
+      success: false,
+      error: "Username can only contain alphanumeric characters",
+    });
+  }
+
+  if (validateInputEmail(req.body.email)) {
     console.log(req.user);
     const user = new User(
       null,
@@ -169,7 +213,7 @@ router.delete("/", authenticateToken, async (req, res) => {
 
 //login
 router.post("/login", async (req, res) => {
-  if (validateInput(req.body.emailorusername)) {
+  if (validateInputEmail(req.body.emailorusername)) {
     loginWithEmail(req.body.emailorusername, req.body.password)
       .then((result) => {
         const payload = {
@@ -243,6 +287,15 @@ router.put("/changepassword", authenticateToken, async (req, res) => {
     res.status(400).send({
       success: false,
       error: "INCOMPLETE_BODY",
+    });
+    return;
+  }
+
+  if (!validateInputPassword(req.body.newpassword)) {
+    res.status(400).send({
+      success: false,
+      error:
+        "Password must be at least 8 characters long, contain at least one uppercase letter and one special character",
     });
     return;
   }
